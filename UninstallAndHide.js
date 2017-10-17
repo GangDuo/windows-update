@@ -4,11 +4,23 @@
  Copyright 2015-2016 330k
  使用は自己責任でお願いします
 **********************************************************************/
+if(!String.prototype.trim) {
+  String.prototype.trim = function () {
+    return this.replace(/^\s+|\s+$/g,'');
+  };
+}
+
 try{
   // インストールしないWindowsUpdateのKB番号
-  var disabledKBs = [
-    4041693
-  ].sort().reverse();
+  var disabledKBs = [];
+  var line;
+  while (!WScript.StdIn.AtEndOfStream) {
+     line = WScript.StdIn.ReadLine().trim();
+     if(line.length > 0) {
+       disabledKBs.push(line);
+     }
+  }
+  disabledKBs.sort().reverse();
   
   var disabledKBregexp = new RegExp('(' + disabledKBs.join(')|(') + ')');
   var updateSession, updateSearcher, searchResult, update;
